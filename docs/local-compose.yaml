@@ -8,7 +8,7 @@ services:
       RENOVATE_GIT_AUTHOR: Renovate Bot <bot@renovateapp.com>
       RENOVATE_REPOSITORIES: ["andifg/email_rule_engine"]
       RENOVATE_PR_HOURLY_LIMIT: 5
-      RENOVATE_ONBOARDING_CONFIG: '{"$$schema": "https://docs.renovatebot.com/renovate-schema.json", "extends": ["config:recommended", ":dependencyDashboard"] }'
+      RENOVATE_ONBOARDING_CONFIG: '{"$schema": "https://docs.renovatebot.com/renovate-schema.json", "extends": ["config:recommended", ":dependencyDashboard"] }'
       RENOVATE_AUTOMERGE: "false"
       RENOVATE_AUTODISCOVER: "false"
     volumes:

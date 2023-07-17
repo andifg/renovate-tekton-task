@@ -1,0 +1,73 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: renovate-bot
+  labels:
+    app.kubernetes.io/version: '0.1'
+spec:
+  description: >-
+    This task runs the renovate bot
+  params:
+    - name: renovate-platform
+      type: string
+      description: The platform to run renovate for
+    - name: renovate-token-secret-name
+      type: string
+      description: The secret name containing the access token
+    - name: renovate-base-dir
+      type: string
+      description: The renovate base directory
+      default: /tmp/renovate
+    - name: renovate-git-author
+      type: string
+      description: Git author for renovate commits
+      default: 'Renovate Bot <bot@renovateapp.com>'
+    - name: renovate-repositories
+      type: string
+      description: The repositories to run renovate for
+    - name: renovate-pr-hourly-limit
+      type: string
+      description: The hourly limit for PRs
+      default: 5
+    - name: renovate-onboarding-config
+      type: string
+      description: The onboarding config for renovate
+      default: '{"$schema": "https://docs.renovatebot.com/renovate-schema.json", "extends": ["config:recommended", ":dependencyDashboard"] }'
+    - name: renovate-automerge
+      type: string
+      description: Whether to automerge PRs
+      default: false
+    - name: renovate-autodiscover
+      type: string
+      description: Whether to autodiscover repositories
+      default: false
+    - name: renovate-image-name
+      type: string
+      description: The image to use for renovate
+      default: renovate/renovate
+  steps:
+    - env:
+        - name: RENOVATE_PLATFORM
+          value: $(params.renovate-platform)
+        - name: "RENOVATE_TOKEN"
+          valueFrom:
+            secretKeyRef:
+              key: "token"
+              name: $(params.renovate-token-secret-name)
+        - name: RENOVATE_BASE_DIR
+          value: $(params.renovate-base-dir)
+        - name: RENOVATE_GIT_AUTHOR
+          value: $(params.renovate-git-author)
+        - name: RENOVATE_REPOSITORIES
+          value: $(params.renovate-repositories)
+        - name: RENOVATE_PR_HOURLY_LIMIT
+          value: $(params.renovate-pr-hourly-limit)
+        - name: RENOVATE_ONBOARDING_CONFIG
+          value: $(params.renovate-onboarding-config)
+        - name: RENOVATE_AUTOMERGE
+          value: $(params.renovate-automerge)
+        - name: RENOVATE_AUTODISCOVER
+          value: $(params.renovate-autodiscover)
+      image: $(params.renovate-image-name)
+      name: renovate
+      resources: {}

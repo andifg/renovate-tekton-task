@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: renovate-
+  namespace: tekton-resources
+spec:
+  taskRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/andifg/renovate-tekton-task.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: renovate/0.1/task.yaml
+  params:
+  - name: renovate-platform
+    value: github
+  - name: renovate-token-secret-name
+    value: renovate-api-token-github
+  - name: renovate-repositories
+    value: '["andifg/email_rule_engine"]'
