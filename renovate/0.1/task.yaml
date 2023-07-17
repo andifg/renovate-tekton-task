@@ -44,9 +44,10 @@ spec:
     - name: renovate-image-name
       type: string
       description: The image to use for renovate
-      default: renovate/renovate
+      default: renovate/renovate:36.9
   steps:
-    - env:
+    - name: renovate
+      env:
         - name: RENOVATE_PLATFORM
           value: $(params.renovate-platform)
         - name: "RENOVATE_TOKEN"
@@ -69,5 +70,8 @@ spec:
         - name: RENOVATE_AUTODISCOVER
           value: $(params.renovate-autodiscover)
       image: $(params.renovate-image-name)
-      name: renovate
       resources: {}
+  workspaces:
+    - name: renovate-base-dir-cache
+      mountPath: $(params.renovate-base-dir)
+      optional: true

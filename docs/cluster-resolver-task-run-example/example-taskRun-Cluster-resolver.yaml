@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: renovate-
+  namespace: renovate-bot
+spec:
+  taskRef:
+    resolver: cluster
+    params:
+      - name: kind
+        value: task
+      - name: name
+        value:  renovate-bot
+      - name: namespace
+        value: renovate-bot
+  params:
+  - name: renovate-platform
+    value: github
+  - name: renovate-token-secret-name
+    value: renovate-api-token-github
+  - name: renovate-repositories
+    value: '["andifg/email_rule_engine", "andifg/coffee_backend"]'
+  workspaces:
+    - name: renovate-base-dir-cache
+      persistentVolumeClaim:
+        claimName: renovate-cache

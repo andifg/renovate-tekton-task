@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renovate-event-creation
+spec:
+  schedule: "* */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: registry.access.redhat.com/ubi8/ubi-minimal:8.8
+            args: ["curl", "-X", "POST", "--data", "{}", "el-renovate-listener:8080"]
+          restartPolicy: Never
